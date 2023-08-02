@@ -1,0 +1,386 @@
+html {
+    scroll-behavior: smooth;
+}
+
+@keyframes listras {
+    from {background-position: bottom left;}
+    to {background-position: top right;}
+}
+
+body {
+    background: url("imagens/background.jpg");
+    animation: listras 10s infinite linear;
+    background-size: 261px;
+    /**/
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    /**/
+    font-family: 'Myriad Pro Regular';
+    color: rgb(37, 37, 37);
+    overflow-x: hidden;
+    height: 100vh;
+    margin: 0;
+}
+
+@keyframes rainbow { 
+    0%{background-position:0% 82%;}
+    50%{background-position:100% 19%;}
+    100%{background-position:0% 82%;}
+}
+
+.rainbowBG {
+    background-image: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+    background-size: 1800% 1800%;
+    animation: rainbow 18s ease infinite;
+}
+
+header .headerMain {
+    min-height: 50px;
+    text-shadow: 1px 1px #d1d1d1, -1px 1px #d1d1d1, 1px -1px #d1d1d1, -1px -1px #d1d1d1;
+    background-image: linear-gradient(0deg, #ffe96e, #ffe031);
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    display: flex;
+}
+
+header .headerMain .logo h1, 
+header .headerMain .logo p {
+    text-shadow: 1px 1px #000, -1px 1px #000, 1px -1px #000, -1px -1px #000;
+}
+
+header .headerMain > * {
+    margin: auto 2vh;
+}
+
+header .headerMain .logo {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+@keyframes rainbowText {
+    0%{color: #ff2400;}
+    11%{color: #e81d1d;}
+    22%{color: #e8b71d;}
+    35%{color: #e3e81d;}
+    48%{color: #1de840;}
+    63%{color: #1ddde8;}
+    69%{color: #2b1de8;}
+    86%{color: #dd00f3;}
+    100%{color: #ff2400;}
+}
+
+header .headerMain .logo div > *{
+    animation: rainbowText 10s ease infinite;
+    color:#f3f3f3;
+    margin: 0px;
+}
+
+header .headerMain .logo img {
+    filter: drop-shadow(5px 5px 1px #0007);
+    height: 80px;
+}
+
+header .headerMain .title {
+    font-family: 'Myriad Pro Bold';
+    filter: drop-shadow(0px 3px 0px #000);
+}
+
+.dropdown {
+    gap: 5px;
+    z-index: 1;
+    display: none;
+    padding: 0.2em;
+    min-height: 1em;
+    margin-top: -18px;
+    position: absolute;
+    flex-direction: column;
+    background-color: #878787;
+    border: 2px solid #545454;
+}
+
+.dropdown * {
+    text-shadow: none;
+}
+
+#navegacao .botao {
+    background-color: #878787;
+    text-shadow: none;
+    user-select: none;
+    transition: .2s;
+}
+
+#navegacao:hover .dropdown {
+    border-top: 0px;
+    display: flex;
+}
+
+.divisao {
+    height: 50px;
+    background-color: #ffe96e;
+    background: radial-gradient(56.60px at 50% calc(100% - 78.00px),#ffe96e 99%,#0000 101%) calc(50% - 60px) 0/120px 100%,
+    radial-gradient(56.60px at 50% calc(100% + 48.00px),#0000 99%,#ffe96e 101%) 50% calc(100% - 30px)/120px 100% repeat-x; /* TEORIA POR TRÁS: https://css-tricks.com/how-to-create-wavy-shapes-patterns-in-css/*/
+}
+
+div.box {
+    background-repeat: no-repeat;
+    background-color: #c2c2b4;
+    border: 1px solid black;
+    background-size: contain;
+    position: absolute;
+    border-radius: 1em;
+    margin: 10px 30px;
+    max-width: 300px;
+    padding: 1em;
+}
+
+div.box.D {
+    right: 0;
+}
+
+.box h1, 
+.box h2 {
+    margin: 10px 0;
+}
+
+.box p {
+    margin: 0.2em;
+}
+
+.botao {
+    background-color: #0000;
+    border: 2px solid hsl(0, 0%, 33%);
+    text-align: center;
+    color: #fff;
+    padding: 1em;
+}
+
+a.botao.post { /*#bebebe*/
+    border: 2px solid #000;
+    border-radius: 1em;
+    padding: 0.25em;
+    width: 100px;
+    margin: auto;
+}
+
+a:not(.postHeader *) {
+    font-size: medium;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+header a,
+#navegacao .botao {
+    color: #3a3a3a!important;
+}
+
+header a:hover,
+#navegacao:hover > .botao {
+    text-shadow: 0px 0px 2px #d1d1d1, 0px 0px 5px #d1d1d1, 0px 0px 9px #d1d1d1, 0px 0px 12px #d1d1d1;
+}
+
+.botao > *:hover,
+a:hover:not(.postHeader *) {
+    font-size: 1.2em;
+    text-shadow: 0px 0px 2px #d1d1d1, 0px 0px 5px #d1d1d1, 0px 0px 9px #d1d1d1, 0px 0px 12px #d1d1d1;
+}
+
+.postagem .postContent a:hover {
+    font-size: initial;
+}
+
+a.botao.post:hover {
+    background-color: #c8cbc2;
+    font-size: initial;
+    text-shadow: 0px 0px 2px #fff0, 0px 0px 5px #fff0, 0px 0px 9px #fff0, 0px 0px 12px #fff0;
+}
+
+main {
+    flex-grow: 1;
+}
+
+main .mainContent {
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 0 auto;
+    display: flex;
+    width: 50%;
+    gap: 0.5em;
+}
+
+.postagem {
+    background-image: linear-gradient(#ffd900, 4em, #dadada 0%); /*#e2e4df*/
+    border: 1px solid black;
+    flex-direction: column;
+    border-radius: 1em;
+    max-width: 100%;
+    display: flex;
+    padding: 1em;
+    gap: 10px;
+    font-size: 1.1em;
+    filter: drop-shadow(0 0 0 #000c);
+    transition: 0.2s;
+    margin-top: 1em;
+}
+
+.postagem:hover:not(.postagem.principal) {
+    filter: drop-shadow(0 1em 5px #000a);
+    margin-top: 0em;
+    margin-bottom: 1em;
+}
+
+.postagem.principal {
+    max-width: 100%;
+}
+
+.postHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.postHeader h1 {
+    margin: 0;
+}
+
+.textoPost *,
+.box p {
+    text-indent: 1em;
+}
+
+.postHeader img {
+    max-height: 14px;
+}
+
+.box hr,
+.postagem hr {
+    border-top: 0px solid #ffe031;
+    border-bottom: 0px solid #ffe031;
+    margin: 0 -1em;
+}
+
+.postContent {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.postContent img {
+    background-color: #66842477;
+    border-radius: 1em;
+    max-height: 150px;
+}
+
+.postContent img.gg{
+    max-height: 300px;
+}
+
+td, th {
+    padding: 1em;
+    border: 1px solid #1a1a1a;
+}
+
+.divisaoBottom {
+    height: 50px;
+    background-color: #ffe96e;
+    background: radial-gradient(56.60px at 50% 78.00px,#ffe96e 99%,#0000 101%) calc(50% - 60px) 0/120px 100%,
+    radial-gradient(56.60px at 50% -48px,#0000 99%,#ffe96e 101%) 50% 30px/120px 100% repeat-x; /* TEORIA POR TRÁS: https://css-tricks.com/how-to-create-wavy-shapes-patterns-in-css/*/
+}
+
+footer .footerMain {
+    background-color: #ffe96e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2em 1em;
+}
+
+.bold {
+    font-weight: bolder;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+@font-face {
+    font-family: 'Myriad Pro Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Myriad Pro Regular'), url('fontes/MYRIADPRO-REGULAR.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Myriad Pro Light';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Myriad Pro Light'), url('fontes/MyriadPro-Light.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Myriad Pro Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Myriad Pro Bold'), url('fontes/MYRIADPRO-BOLD.woff') format('woff');
+}
+
+@media screen and (max-width: 1500px) {
+    main {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        display: flex;
+        gap: 2em;
+    }
+    
+    main .mainContent {
+        width: 70%;
+    }
+
+    div.box {
+        max-width: 60%;
+        position: static;
+        margin: 0!important; 
+    }
+
+    .postagem {
+        max-width: fit-content;
+    }
+}
+
+@media screen and (max-width: 937px) {
+    .postagem.principal .postContent {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 586px) {
+    .postagem .postContent{
+        margin: 0em;
+    }
+
+    .postagem .postContent p{
+        margin: 0.2em;
+    }
+
+    .postContent img {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 470px) {
+    .postHeader h1 {
+        font-size: 1em;
+        margin-bottom: 1em;
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .postHeader img {
+        display: none;
+    }
+}
