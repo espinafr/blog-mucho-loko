@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>blog mucho loko 👌</title>
+    <meta property='og:title' content='Um blog mucho loko 👌'>
+    <meta name='twitter:title' content='Um blog mucho loko 👌'>
+    <meta name='description' content='Blog para compartilhar pensamentos, notícias e experiências da minha vida! Since 2019'>
+    <meta property='og:description' content='Blog para compartilhar pensamentos, notícias e experiências da minha vida! Since 2019'>
+    <meta name='twitter:description' content='Blog para compartilhar pensamentos, notícias e experiências da minha vida! Since 2019'>
+    <meta property="og:image"  content="{{ url_for('static', filename='imagens/Banner.jpg') }}">
+    <meta name="twitter:image" content="{{ url_for('static', filename='imagens/Banner.jpg') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='imagens/icon.png') }}" type="image/x-icon">
+    {% block additional_styles %}{% endblock %}
+</head>
+<body>
+{% block header %}
+<header id='header'>
+    <div class="headerMain">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='imagens/logo.png') }}">
+            <div>
+                <h1 class="title">blog mucho loko 📸👌</h1>
+                <p>agora em full hd!</p>
+            </div>
+        </div>
+        <div id="navegacao">
+            <p class="botao">Navegação</p>
+            <div class="dropdown">
+                <a href="../index.html">Home</a>
+                <a target="_blank" href="https://twitter.com/espinafr">Twitter</a>
+                <a target="_blank" href="https://steamcommunity.com/id/amaiorgostosadobrasil">Steam</a>
+                <a target="_blank" href="https://github.com/espinafr">Github</a>
+                <a target="_blank" href="https://www.twitch.tv/potatoingles">Twitch</a>
+            </div>
+        </div>
+    </div>
+    <div class="divisao"></div>
+</header>
+{% endblock %}
+{% block content %}{% endblock %}
+    <footer>
+        <div class="divisaoBottom"></div>
+        <div class="footerMain">
+            <p>Por Théo Modeneis Ruela</p>
+            <a href="{{ url_for('index') }}">Página Inicial</a>
+        </div>
+    </footer>
+</body>
+</html>

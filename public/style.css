@@ -80,6 +80,7 @@ header .headerMain .logo div > *{
 
 header .headerMain .logo img {
     filter: drop-shadow(5px 5px 1px #0007);
+    margin-right: 1em;
     height: 80px;
 }
 
