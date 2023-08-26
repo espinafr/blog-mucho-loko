@@ -49,6 +49,11 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+@app.route('/postagem/<id:string>')
+def postagens(id):
+    postagem = access_db('SELECT * FROM postagens WHERE id == (?) LIMIT 1', (id,))
+    return render_template('postagem.html', postagem=postagem)
+
 @app.route('/atualizacoes')
 def atualizacoes():
     return render_template('atualizacoes.html')
