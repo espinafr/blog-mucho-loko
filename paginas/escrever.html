@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+    <div class="mainContent">
+        <div class="postagem principal">
+            <div class="postHeader">
+                <h1>Editor de post</h1>
+                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
+            </div>
+            <hr>
+            <!---->
+            <div class="postContent formdiv">
+                <form method="post" action="/escrever" enctype="multipart/form-data">
+                    <div>
+                        <label for="titulo">Título  </label> 
+                        <input id="titulo" type="text" name="titulo" required>
+                    </div>
+                    <label for="conteudo">Conteúdo</label> 
+                    <div>
+                        <textarea id="conteudo" name="conteudo" rows="4" cols="50" required></textarea>
+                    </div>
+                    <div>
+                        <input type="file" name="fileInput" id="fileInput" accept="image/*">
+                        <span>Capa - <label id="fileInputLabel" for="fileInput">Selecionar Arquivo</label></span>
+                    </div>
+                    <div style="display: flex;">
+                        <button class='botao post principal' type="submit">Enviar</button>
+                        <a class="botao post principal" style="color: red!important; border-color: red;" href="{{ url_for('index') }}">Voltar</a>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+const fileInput = document.getElementById('fileInput');
+const filelabel = document.getElementById('fileInputLabel')
+
+fileInput.addEventListener('change', function(){
+    filelabel.textContent = this.files[0].name
+})
+</script>
+{% endblock %}

@@ -45,7 +45,11 @@
         <div class="divisaoBottom"></div>
         <div class="footerMain">
             <p>Por Théo Modeneis Ruela</p>
-            <a href="{{ url_for('index') }}">Página Inicial</a>
+            {% if logado() %}
+            <p>Logado como: {{ logado() }} (<a href="{{ url_for('editor') }}">Postar</a> - <a href="{{ url_for('logout') }}">Sair</a>)</p>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
         </div>
     </footer>
 </body>

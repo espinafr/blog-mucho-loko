@@ -82,19 +82,19 @@
         {% for post in postagem %}
             <div class="postagem">
                 <div class="postHeader">
-                    <h1>{{ postagem['titulo'] }}</h1>
-                    <a href="{{ url_for('postagens', id = postagem['id']) }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
+                    <h1>{{ post[1] }}</h1>
+                    <a href="{{ url_for('postagens', id = post[0]) }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
                 </div>
                 <hr>
                 <div class="postContent">
-                    {% if postagem['imagem'] %}
-                        <img src="{{ url_for('static', filename=f'imagens/posts/{id}') }}">
+                    {% if post[5] != '0' %}
+                        <img src="{{ url_for('static', filename='postsimg/{}.{}'.format(post[0], post[5])) }}">
                     {%endif%}
-                    <div class="textoPost">
-                        <p>{{postagem['conteudo'].split('\n', 1)[0]}}</p>
+                    <div class="textoPost"> 
+                        <p>{{post[2].split('\n', 1)[0]}}</p>
                     </div>
-                </div>
-                <a class="botao post" href="{{ url_for('postagens', id = postagem['id']) }}">Acessar post</a>
+                </div>          
+                <a class="botao post" href="{{ url_for('postagens', id = post[0]) }}">Acessar post</a>
             </div>
         {%endfor%}
     </div>
