@@ -54,7 +54,7 @@
 {% endblock %}
 {% block content %}
 <main id="paginaInicial">
-    <div class="box" id='aboutme'>
+    <div class="box" id="aboutme">  
         <h1>Sobre mim</h1>
         <hr>
         <div class="postContent">
@@ -82,19 +82,23 @@
         {% for post in postagem %}
             <div class="postagem">
                 <div class="postHeader">
-                    <h1>{{ post[1] }}</h1>
-                    <a href="{{ url_for('postagens', id = post[0]) }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
+                    <h1>{{ post[1] }} <span class="data">{{ post[3] }}</span></h1>
+                    <a href="{{ url_for('postagem', id = post[0]) }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
                 </div>
                 <hr>
                 <div class="postContent">
                     {% if post[5] != '0' %}
-                        <img src="{{ url_for('static', filename='postsimg/{}.{}'.format(post[0], post[5])) }}">
+                        <img src="{{ url_for('static', filename='{}/{}.{}'.format(imgPath(), post[0], post[5])) }}">
                     {%endif%}
                     <div class="textoPost"> 
                         <p>{{post[2].split('\n', 1)[0]}}</p>
                     </div>
-                </div>          
-                <a class="botao post" href="{{ url_for('postagens', id = post[0]) }}">Acessar post</a>
+                </div>
+                <div class="postagemfooter">
+                    <p>by. {{ post[4] }}</p>
+                    <a class="botao post" href="{{ url_for('postagem', id = post[0]) }}">Acessar post</a>
+                    <a href="{{ url_for('like', post_id=post[0]) }}" id="post-{{post[0]}}" class="likes">{{ post[6] }} likes</a>
+                </div>
             </div>
         {%endfor%}
     </div>

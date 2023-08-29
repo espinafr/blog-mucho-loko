@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from flask import Flask, request, render_template, url_for, redirect, session, abort
+from flask import Flask, request, render_template, url_for, redirect, session, abort, make_response
 from werkzeug.exceptions import HTTPException
 from datetime import datetime
 import sqlite3
@@ -68,10 +68,32 @@ def escrever_artigo():
         file.save(filepath)
     return redirect(url_for('index'))
 
+@app.route('/like/<int:post_id>')
+def like(post_id):
+    liked_posts = request.cookies.get('liked_posts', '').split(',')
+    post_likes = access_db('SELECT likes FROM postagem WHERE id == (?)', (post_id,), 'f')[0][0]
+
+    if str(post_id) not in liked_posts:
+        post_likes += 1
+        access_db('UPDATE postagem SET likes = (?) WHERE id == (?)', (post_likes, post_id), 'c')
+        liked_posts.append(str(post_id))
+        print(post_likes)
+    else:
+        post_likes -= 1
+        access_db('UPDATE postagem SET likes = (?) WHERE id == (?)', (post_likes, post_id), 'c')
+        liked_posts.remove(str(post_id))
+    
+    if request.referrer.rsplit('/', 2)[1] == 'postagem':    
+        response = make_response(redirect(url_for('postagem', id=request.referrer.rsplit('/', 2)[2])))
+    else:
+        response = make_response(redirect(url_for('index')))
+    response.set_cookie('liked_posts', ','.join(liked_posts))
+    return response
+
 @app.route('/postagem/<id>')
-def postagens(id):
-    postagem = access_db('SELECT * FROM postagens WHERE id == (?) LIMIT 1', (id,))
-    return render_template('postagem.html', postagem=postagem)
+def postagem(id):
+    post = access_db('SELECT * FROM postagem WHERE id == (?) LIMIT 1', (id,), 'f')
+    return render_template('postagem.html', post=post[0])
 
 @app.route('/atualizacoes')
 def atualizacoes():
@@ -81,7 +103,9 @@ def atualizacoes():
 def utility_processor():
     def logado():
         return session.get('username')
-    return dict(logado=logado)
+    def imgPath():
+        return app.config['UPLOAD_FOLDER'].rsplit('\\')[1]
+    return dict(logado=logado, imgPath=imgPath)
 
 def access_db(command: str, params, method: str):
     conn = sqlite3.connect('datadados.db')

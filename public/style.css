@@ -150,6 +150,22 @@ input[type="file"] {
     justify-content: center!important;
 }
 
+.data {
+    color: #6A6C6E;
+    font-size: 50%;
+    font-style: italic;
+}
+
+.likes {
+    text-align: end;
+    text-decoration: none;
+    color: inherit;
+}
+
+.likes:hover {
+    color:#1ab0ec;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -198,7 +214,7 @@ div.box.D {
     margin: auto;
 }
 
-a:not(.postHeader *), button {
+a:not(.postHeader *, .likes), button {
     font-size: medium;
     color: #000!important;
     text-decoration: none;
@@ -217,7 +233,7 @@ header a:hover,
 }
 
 .botao > *:hover,
-a:hover:not(.postHeader *) {
+a:hover:not(.postHeader *, .likes) {
     font-size: 1.2em;
     text-shadow: 0px 2px 5px #ffffff, 0px 2px 7px #ffffff;
 }
@@ -309,6 +325,21 @@ main .mainContent {
 
 .postContent img.gg{
     max-height: 300px;
+}
+
+.postagemfooter {
+    margin: -1em 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.postagemfooter p, .postagemfooter .likes {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
 }
 
 #aboutme {
@@ -410,7 +441,7 @@ footer .footerMain {
     }
 
     .postagem {
-        max-width: fit-content;
+        max-width: 100%;
     }
     
     #aboutme {
@@ -435,6 +466,8 @@ footer .footerMain {
 @media screen and (max-width: 586px) {
     .postagem .postContent{
         margin: 0em;
+        display: flex;
+        flex-direction: column;
     }
 
     .postagem .postContent p{
@@ -442,7 +475,7 @@ footer .footerMain {
     }
 
     .postContent img {
-        display: none;
+        max-height: 100%;
     }
 }
 
@@ -452,9 +485,6 @@ footer .footerMain {
         font-size: 1em;
         margin-bottom: 1em;
     }
-}
-
-@media screen and (max-width: 390px) {
     .postHeader img {
         display: none;
     }
