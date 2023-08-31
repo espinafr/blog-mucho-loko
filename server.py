@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import os
-from flask import Flask, request, render_template, url_for, redirect, session, abort, make_response
+from flask import Flask, request, render_template, url_for, redirect, session, abort, jsonify
 from werkzeug.exceptions import HTTPException
 from datetime import datetime
+import time
 import sqlite3
 import uuid
 
@@ -14,6 +15,7 @@ app.secret_key = os.environ.get('SECRET')
 UPLOAD_FOLDER = 'public\\postsimg'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['USERS'] = {os.environ.get('USER'): os.environ.get('SENHA')}
+last_interaction_time = {}
 
 def generate_unique_filename(filename):
     ext = filename.rsplit('.', 1)[1]    
@@ -68,27 +70,36 @@ def escrever_artigo():
         file.save(filepath)
     return redirect(url_for('index'))
 
-@app.route('/like/<int:post_id>')
-def like(post_id):
-    liked_posts = request.cookies.get('liked_posts', '').split(',')
-    post_likes = access_db('SELECT likes FROM postagem WHERE id == (?)', (post_id,), 'f')[0][0]
+@app.route('/deletarpost/<post_id>')
+def deletarpost(post_id):
+    if 'username' in session:
+      access_db('DELETE FROM postagem WHERE id == (?)', (post_id,), "c")
+    return redirect(url_for('index'))
 
-    if str(post_id) not in liked_posts:
-        post_likes += 1
+@app.route('/like', methods=['POST', 'GET'])
+def like():
+    now = time.time()
+    post_id = request.args.get('post_id')
+    if request.method == 'GET' and (now - last_interaction_time.get((request.remote_addr, post_id), 0)) > 2:
+        post_id = request.args.get('post_id')
+        
+        liked_posts = request.cookies.get('liked_posts', '').split(',')
+        post_likes = access_db('SELECT likes FROM postagem WHERE id == (?)', (post_id,), 'f')[0][0]
+
+        if str(post_id) not in liked_posts:
+            post_likes += 1
+            liked_posts.append(str(post_id))
+        else:
+            post_likes -= 1
+            liked_posts.remove(str(post_id))
         access_db('UPDATE postagem SET likes = (?) WHERE id == (?)', (post_likes, post_id), 'c')
-        liked_posts.append(str(post_id))
-        print(post_likes)
-    else:
-        post_likes -= 1
-        access_db('UPDATE postagem SET likes = (?) WHERE id == (?)', (post_likes, post_id), 'c')
-        liked_posts.remove(str(post_id))
-    
-    if request.referrer.rsplit('/', 2)[1] == 'postagem':    
-        response = make_response(redirect(url_for('postagem', id=request.referrer.rsplit('/', 2)[2])))
-    else:
-        response = make_response(redirect(url_for('index')))
-    response.set_cookie('liked_posts', ','.join(liked_posts))
-    return response
+        last_interaction_time[(request.remote_addr, post_id)] = now
+
+        response = jsonify({'likes':post_likes})
+        response.set_cookie('liked_posts', ','.join(liked_posts))
+
+        return response
+    return abort(500)
 
 @app.route('/postagem/<id>')
 def postagem(id):

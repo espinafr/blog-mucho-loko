@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block additional_styles %}
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='like.js') }}"></script>
 <style>
     header .headerMain {
         text-shadow: 1px 1px #00000000, -1px 1px #00000000, 1px -1px #00000000, -1px -1px #00000000;
@@ -97,7 +99,7 @@
                 <div class="postagemfooter">
                     <p>by. {{ post[4] }}</p>
                     <a class="botao post" href="{{ url_for('postagem', id = post[0]) }}">Acessar post</a>
-                    <a href="{{ url_for('like', post_id=post[0]) }}" id="post-{{post[0]}}" class="likes">{{ post[6] }} likes</a>
+                    <a data-post_id="{{post[0]}}" class="likes">{{ post[6] }} likes</a>
                 </div>
             </div>
         {%endfor%}

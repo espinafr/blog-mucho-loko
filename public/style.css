@@ -160,6 +160,8 @@ input[type="file"] {
     text-align: end;
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
+    user-select: none;
 }
 
 .likes:hover {
