@@ -5,22 +5,16 @@ import os
 from flask import Flask, request, render_template, url_for, redirect, session, abort, jsonify
 from werkzeug.exceptions import HTTPException
 from datetime import datetime
+from PIL import Image
 import time
 import sqlite3
-import uuid
 
 app = Flask(__name__, static_folder='public', template_folder='paginas')
 
 app.secret_key = os.environ.get('SECRET')
 UPLOAD_FOLDER = 'public\\postsimg'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['USERS'] = {os.environ.get('USER'): os.environ.get('SENHA')}
 last_interaction_time = {}
-
-def generate_unique_filename(filename):
-    ext = filename.rsplit('.', 1)[1]    
-    unique_filename = "{}.{}".format(uuid.uuid4().hex, ext)
-    return unique_filename
 
 @app.route('/', methods=['GET'])
 def index():
@@ -42,7 +36,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if username in app.config['USERS'] and app.config['USERS'][username] == password:
+        requestUser = access_db('SELECT senha FROM usuarios WHERE nome == (?) LIMIT 1', (username,), 'f')
+        if requestUser != [] and requestUser[0][0] == password:
             session['username'] = username
             return redirect(url_for('index'))
     return render_template('login.html')
@@ -51,6 +46,16 @@ def login():
 def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
+
+@app.route('/adicionaradm', methods=['GET', 'POST'])
+def addadmin():
+    if 'username' in session:
+        if request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            access_db('INSERT INTO usuarios (nome, senha, admin) VALUES (?, ?, ?)', (username, password, 1), 'c')
+        return render_template('addadmin.html', admins=access_db('SELECT nome FROM usuarios WHERE admin == (?)',(1,),'f'))
+    abort(404)
 
 @app.route('/editor')
 def editor():
@@ -61,18 +66,24 @@ def editor():
 
 @app.route('/escrever', methods=['POST'])
 def escrever_artigo():
-    titulo = request.form['titulo']
-    conteudo = request.form['conteudo']
-    file = request.files['fileInput']
-    access_db('INSERT INTO postagem (titulo, conteudo, data, autor, imagem) VALUES (?, ?, ?, ?, ?)', (titulo, conteudo, datetime.now().strftime("%d/%m/%Y às %H:%M"), session.get('username'), file.filename.rsplit('.', 1)[1] if file else '0'), 'c')
-    if file:
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], "{}.{}".format(access_db('select seq from sqlite_sequence where name="postagem"', (), 'f')[0][0], file.filename.rsplit('.', 1)[1]))
-        file.save(filepath)
-    return redirect(url_for('index'))
+    if 'username' in session:
+        titulo = request.form['titulo']
+        conteudo = request.form['conteudo']
+        file = request.files['fileInput']
+        access_db('INSERT INTO postagem (titulo, conteudo, data, autor, imagem) VALUES (?, ?, ?, ?, ?)', (titulo, conteudo, datetime.now().strftime("%d/%m/%Y às %H:%M"), session.get('username'), file.filename.rsplit('.', 1)[1] if file else '0'), 'c')
+        if file:
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], "{}.{}".format(access_db('select seq from sqlite_sequence where name="postagem"', (), 'f')[0][0], file.filename.rsplit('.', 1)[1]))
+            file.save(filepath)
+            if file.filename.rsplit('.', 1)[1] != 'gif':
+                Image.open(filepath).save(filepath, quality=75)
+        return redirect(url_for('index'))
+    abort(404)
 
 @app.route('/deletarpost/<post_id>')
 def deletarpost(post_id):
     if 'username' in session:
+      filepath = os.path.join(app.config['UPLOAD_FOLDER'], "{}.{}".format(post_id, access_db('select imagem from postagem where id==(?)', (post_id), 'f')[0][0]))
+      os.remove(filepath)
       access_db('DELETE FROM postagem WHERE id == (?)', (post_id,), "c")
     return redirect(url_for('index'))
 
@@ -139,14 +150,13 @@ if __name__ == '__main__':
         )
     ''', (), 'c')
     access_db('''
-        CREATE TABLE IF NOT EXISTS comentarios (
-            id INTEGER PRIMARY KEY,
-            idPost INTERGER,
-            conteudo TEXT,
-            data INTEGER,
-            autor TEXT,
-            email TEXT,
-            likes INTEGER DEFAULT 0
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT UNIQUE,
+            senha TEXT,
+            admin INTEGER DEFAULT 0
         )
-    ''', (), 'c')   
+    ''', (), 'c')
+    access_db('INSERT OR IGNORE INTO usuarios(nome, senha, admin) VALUES (?, ?, ?)', ('Théo', '131007', '1'), 'c')
     app.run(debug=True)
+    

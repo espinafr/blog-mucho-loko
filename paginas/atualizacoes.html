@@ -13,7 +13,7 @@
                 <div class="textoPost nogap border">
                     <h3>WIP release 1.0</h3>
                     <hr>
-                    <p>eu literal fiz tudo do backend (vixi, não deu tempo de terminar em um dia... rs)</p>
+                    <p>eu literal fiz tudo do backend</p>
                     <ul>
                         <li>Servidor backend</li>
                         <li>Publicação de posts</li>
@@ -21,6 +21,9 @@
                         <li>Páginas dinâmicas</li>
                         <li>Banco de dados</li>
                         <li>Login do ADEEME</li>
+                        <li>Sistema de likes</li>
+                        <li>Novos redatores</li>
+                        <li>Otimizações gerais</li>
                     </ul>
                 </div>
             </div>
@@ -36,6 +39,9 @@
                     <p>Terminei a aparência do site, só peguei um molde de um trabalho que eu fiz... Agora só falta todo o resto rs</p>
                 </div>
             </div>
+            {%if logado() %}
+                <a href="{{url_for('addadmin')}}" class="botao post principal">Adicionar ADMINS</a>
+            {%endif%}
             <a class="botao post principal" href="{{ url_for('index') }}">Voltar</a>
         </div>
     </div>

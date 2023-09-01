@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+    <div class="mainContent">
+        <div class="postagem principal">
+            <div class="postHeader">
+                <h1>Adicionar Admins</h1>
+                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
+            </div>
+            <hr>
+            <!---->
+            <div class="postContent formdiv">
+                <form method="post" action="">
+                    <div>
+                        <label for="username">Usuário:</label> 
+                        <input type="text" name="username" required>
+                    </div>
+                    <div>
+                        <label for="password">Senha:</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <button type="submit">Adicionar</button>
+                </form>
+            </div>
+            <ul>
+                {% for adm in admins %}
+                    <li>{{ adm[0] }}</li>
+                {%endfor%}
+            </ul>
+            <a class="botao post principal" href="{{ url_for('index') }}">Voltar</a>
+        </div>
+    </div>
+</main>
+{% endblock %}
