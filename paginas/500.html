@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+    <div class="mainContent">
+        <div class="postagem principal">
+            <div class="postHeader">
+                <h1>ERRO!!</h1>
+                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
+            </div>
+            <hr>
+            <!---->
+            <div class="postContent">
+                <div class="textoPost">
+                    <h3>Parece que alguns gnomos mexeram nos cabos do servidor..</h3>
+                    <p style="color: red;">ERRO: {{ erro }}</p>
+                </div>
+            </div>
+            <a class="botao post principal" href="{{ url_for('index') }}">Voltar</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

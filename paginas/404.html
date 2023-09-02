@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+    <div class="mainContent">
+        <div class="postagem principal">
+            <div class="postHeader">
+                <h1>Página não encontrada</h1>
+                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
+            </div>
+            <hr>
+            <!---->
+            <div class="postContent">
+                <div class="textoPost">
+                    <h3>Acho que roubaram o mapa pra essa página... Malditos gnomos!</h3>
+                </div>
+            </div>
+            <a class="botao post principal" href="{{ url_for('index') }}">Voltar</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

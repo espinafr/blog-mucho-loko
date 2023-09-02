@@ -20,16 +20,16 @@ last_interaction_time = {}
 def index():
     return render_template('index.html', postagem=reversed(access_db('SELECT * FROM postagem',(),'f')))
 
-#@app.errorhandler(404)
-#def not_found_error(error):    
-#    return render_template('404.html'), 404
+@app.errorhandler(404)
+def not_found_error(error):    
+    return render_template('404.html'), 404
 
-#@app.errorhandler(Exception)
-#def handle_exception(e):
-#    if isinstance(e, HTTPException):
-#        return e
-#
-#    return render_template("500.html", erro=e), 500
+@app.errorhandler(Exception)
+def handle_exception(e):
+    if isinstance(e, HTTPException):
+        return e
+
+    return render_template("500.html", erro=e), 500
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
