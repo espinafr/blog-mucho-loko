@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+    <div class="mainContent">
+        <div class="postagem principal">
+            <div class="postHeader">
+                <h1>Editor de post</h1>
+                <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
+            </div>
+            <hr>
+            <!---->
+            <div class="postContent formdiv">
+              {%if post!=0 %}
+                <form method="post" action="{{url_for('editar_artigo', post_id=post[0])}}" enctype="multipart/form-data">
+                    <div>
+                        <label for="titulo">Título  </label> 
+                        <input id="titulo" type="text" name="titulo" value="{{ post[1].decode('utf-8') }}" required>
+                    </div>
+                    <label for="conteudo">Conteúdo</label> 
+                    <div>
+                        <textarea id="conteudo" name="conteudo" rows="4" cols="50" required>{{ post[2].decode("utf-8") }}</textarea>
+                    </div>
+                    <div>
+                        <input type="file" name="fileInput" id="fileInput" accept="image/*">
+                        <span>Capa - <label id="fileInputLabel" for="fileInput">{{ "Imagem já selecionada, clique para mudar" if post[2] else "Selecionar Arquivo" }}</label></span>
+                    </div>
+                    <div style="display: flex;">
+                        <button class="botao post principal" type="submit">Editar</button>
+                        <a class="botao post principal" style="color: red!important; border-color: red;" href="{{ url_for('index') }}">Voltar</a>
+                    </div>
+                </form> 
+              {% else %}
+                  <h1>Erro localizando post.</h1>
+                  <div style="display: flex;">
+                    <a class="botao post principal" style="color: red!important; border-color: red;" href="{{ url_for('index') }}">Voltar</a>
+                  </div>
+              {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+const fileInput = document.getElementById('fileInput');
+const filelabel = document.getElementById('fileInputLabel')
+
+fileInput.addEventListener('change', function(){
+    filelabel.textContent = this.files[0].name
+})
+</script>
+{% endblock %}

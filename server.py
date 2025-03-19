@@ -1,10 +1,10 @@
-#env\Scripts\python.exe
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import os
 from flask import Flask, request, render_template, url_for, redirect, session, abort, jsonify
 from werkzeug.exceptions import HTTPException
-from datetime import datetime
+from datetime import datetime, timedelta
 from PIL import Image
 import time
 import sqlite3
@@ -12,10 +12,10 @@ import sqlite3
 app = Flask(__name__, static_folder='public', template_folder='paginas')
 
 app.secret_key = os.environ.get('SECRET')
-UPLOAD_FOLDER = 'public\\postsimg'
+UPLOAD_FOLDER = 'public/postimg'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 last_interaction_time = {}
-
+  
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html', postagem=reversed(access_db('SELECT * FROM postagem',(),'f')))
@@ -67,24 +67,54 @@ def editor():
 @app.route('/escrever', methods=['POST'])
 def escrever_artigo():
     if 'username' in session:
-        titulo = request.form['titulo']
-        conteudo = request.form['conteudo']
-        file = request.files['fileInput']
-        access_db('INSERT INTO postagem (titulo, conteudo, data, autor, imagem) VALUES (?, ?, ?, ?, ?)', (titulo, conteudo, datetime.now().strftime("%d/%m/%Y às %H:%M"), session.get('username'), file.filename.rsplit('.', 1)[1] if file else '0'), 'c')
-        if file:
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], "{}.{}".format(access_db('select seq from sqlite_sequence where name="postagem"', (), 'f')[0][0], file.filename.rsplit('.', 1)[1]))
-            file.save(filepath)
-            if file.filename.rsplit('.', 1)[1] != 'gif':
-                Image.open(filepath).save(filepath, quality=75)
-        return redirect(url_for('index'))
+      titulo = request.form['titulo']
+      conteudo = request.form['conteudo']
+      file = request.files['fileInput']
+      access_db('INSERT INTO postagem (titulo, conteudo, data, autor, imagem) VALUES (?, ?, ?, ?, ?)', (titulo, conteudo,(datetime.now()-timedelta(hours=3)).strftime("%d/%m/%Y às %H:%M"), session.get('username'), file.filename.rsplit('.', 1)[1] if file else '0'), 'c')
+      if file:
+          filepath = os.path.join(app.config['UPLOAD_FOLDER'], "{}.{}".format(access_db('select seq from sqlite_sequence where name="postagem"', (), 'f')[0][0], file.filename.rsplit('.', 1)[1]))
+          file.save(filepath)
+          if file.filename.rsplit('.', 1)[1] != 'gif':
+              Image.open(filepath).save(filepath, quality=75)
+      return redirect(url_for('index'))
     abort(404)
 
+@app.route('/editar/<post_id>')
+def editar(post_id):
+    if 'username' in session:
+      post = access_db('SELECT * FROM postagem WHERE id == (?) AND autor == (?) LIMIT 1', (post_id, session.get('username')), 'f')
+      if post:
+        return render_template('editar.html', post=post[0])
+      else:
+        return render_template('editar.html', post=0)
+    else:
+        abort(404)
+
+@app.route('/editar_post/<post_id>', methods=['POST'])
+def editar_artigo(post_id):
+    if 'username' in session:
+      titulo = request.form['titulo']
+      conteudo = request.form['conteudo']
+      file = request.files['fileInput']
+      if file:
+          access_db('UPDATE postagem SET titulo=(?), conteudo=(?), imagem=(?), editado=1 WHERE id == (?)', (titulo, conteudo, file.filename.rsplit('.', 1)[1] if file else '0', post_id), 'c')
+          filepath = os.path.join(app.config['UPLOAD_FOLDER'], "{}.{}".format(post_id, file.filename.rsplit('.', 1)[1]))
+          file.save(filepath)
+          if file.filename.rsplit('.', 1)[1] != 'gif':
+              Image.open(filepath).save(filepath, quality=75)
+      else:
+        access_db('UPDATE postagem SET titulo=(?), conteudo=(?), editado=1 WHERE id == (?)', (titulo, conteudo, post_id), 'c')
+      return redirect(url_for('postagem', id=post_id))
+    abort(404)
+  
 @app.route('/deletarpost/<post_id>')
 def deletarpost(post_id):
     if 'username' in session:
-      filepath = os.path.join(app.config['UPLOAD_FOLDER'], "{}.{}".format(post_id, access_db('select imagem from postagem where id==(?)', (post_id), 'f')[0][0]))
-      os.remove(filepath)
-      access_db('DELETE FROM postagem WHERE id == (?)', (post_id,), "c")
+      imagem = access_db('select imagem from postagem where id==(?) and autor==(?)', (post_id, session.get('username')), 'f')
+      if imagem[0][0] != '0':
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], "{}.{}".format(post_id, imagem[0][0]))
+        os.remove(filepath)
+      access_db('DELETE FROM postagem WHERE id == (?) and autor==(?) LIMIT 1', (post_id, session.get('username')), "c")
     return redirect(url_for('index'))
 
 @app.route('/like', methods=['POST', 'GET'])
@@ -105,10 +135,10 @@ def like():
             liked_posts.remove(str(post_id))
         access_db('UPDATE postagem SET likes = (?) WHERE id == (?)', (post_likes, post_id), 'c')
         last_interaction_time[(request.remote_addr, post_id)] = now
-
+        
         response = jsonify({'likes':post_likes})
         response.set_cookie('liked_posts', ','.join(liked_posts))
-
+        
         return response
     return abort(500)
 
@@ -126,11 +156,14 @@ def utility_processor():
     def logado():
         return session.get('username')
     def imgPath():
-        return app.config['UPLOAD_FOLDER'].rsplit('\\')[1]
-    return dict(logado=logado, imgPath=imgPath)
+        return app.config['UPLOAD_FOLDER'].rsplit('/')[1]
+    def autor(nome):
+        return nome == session['username'].encode('utf-8')
+    return dict(logado=logado, imgPath=imgPath, autor=autor)
 
-def access_db(command: str, params, method: str):
-    conn = sqlite3.connect('datadados.db')
+def access_db(command, params, method):
+    conn = sqlite3.connect('.data/datadados.db')
+    conn.text_factory = str
     cursor = conn.cursor()
     cursor.execute(command, params)
     results = cursor.fetchall() if method=='f' else conn.commit()
@@ -146,7 +179,8 @@ if __name__ == '__main__':
             data INTEGER,
             autor TEXT,
             imagem TEXT,
-            likes INTEGER DEFAULT 0
+            likes INTEGER DEFAULT 0,
+            editado INTEGER DEFAULT 0
         )
     ''', (), 'c')
     access_db('''
@@ -157,6 +191,4 @@ if __name__ == '__main__':
             admin INTEGER DEFAULT 0
         )
     ''', (), 'c')
-    access_db('INSERT OR IGNORE INTO usuarios(nome, senha, admin) VALUES (?, ?, ?)', ('Théo', '131007', '1'), 'c')
     app.run(debug=True)
-    

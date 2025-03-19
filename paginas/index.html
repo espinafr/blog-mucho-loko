@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block additional_styles %}
 <script src="{{ url_for('static', filename='jquery.js') }}"></script>
-<script src="{{ url_for('static', filename='like.js') }}"></script>
+<script src="{{ url_for('static', filename='postHandler.js') }}"></script>
 <style>
     header .headerMain {
         text-shadow: 1px 1px #00000000, -1px 1px #00000000, 1px -1px #00000000, -1px -1px #00000000;
@@ -48,7 +48,7 @@
             <a target="_blank" href="https://www.youtube.com/channel/UCnnGG5kATos2gKOyg7lsELA">Youtube</a>
             <a target="_blank" href="https://steamcommunity.com/id/amaiorgostosadobrasil">Steam</a>
             <a target="_blank" href="https://github.com/espinafr">Github</a>
-            <a target="_blank" href="https://www.twitch.tv/potatoingles">Twitch</a>
+            <a target="_blank" href="https://www.twitch.tv/espinafr_">Twitch</a>
         </div>
     </div>
     <div class="divisao"></div>
@@ -56,15 +56,15 @@
 {% endblock %}
 {% block content %}
 <main id="paginaInicial">
-    <div class="box" id="aboutme">  
-        <h1>Sobre mim</h1>
+    <div class="box" id="aboutme">
+        <h1>Sobre nós</h1>
         <hr>
         <div class="postContent">
             <div class="textoPost">
-                <h2>Prazer, Théo!</h2>
-                <p>Gosto de jogar, e principalmente de desenvolver. Comecei a programar fazendo jogos no roblox lá pra 2016, e agora, meio que essa é minha vida rsrs</p>
-                <p>Minha vida na internet começou muito cedo, em 2012 quando eu não tinha capacidade de fazer cocô sem gritar "mãe terminei!", então não pretendo compartilhar muita informação pessoal aqui, tendo em vista que ao longo dos anos provavelmente consegui muita gente pra não gostar de mim... Bem, de qualquer forma, é isso! Tchau tchauu 👋👋</p>
-            </div>
+                <h2>Olá caro leitor!</h2>
+                <p>O Blog Mucho Loko é um projeto iniciado em 2019 que fundamentalmente buscava a criação de um site próprio para o armazenamento de memórias e histórias pessoais ao longo dos anos, mas foi apenas em 2023 que o blog pôde ter uma versão pública e dinâmica lançada (e compartilhada) para a internet aberta.</p>
+                <p>Aqui estão registrados os pensamentos de pessoas, histórias e vivências. Basicamente um diário legal pra quem acha muito brega ter um diário em papel (os redatores). Vida longa ao blog mucho loko!</p>
+          </div>
         </div>
     </div>
     <div class="box D" style="margin-top: 300px; background-image: linear-gradient(#d19f53, 50%, #d48c47); background-position-y: 4.5em;">
@@ -72,8 +72,8 @@
         <hr>
         <div class="postContent">
             <div class="textoPost">
-                <h2>release 1.1</h2>
-                <p>Manejando erros</p>
+                <h2>release 1.4</h2>
+                <p>Agora posts podem ser editados por seus autores... Isso evita muita confusão.</p>
                 <div style="display: flex; justify-content: center; margin-top: 1em;">
                     <a style="width: unset; max-width: fit-content; text-indent: 0px;" class="botao post" href="{{ url_for('atualizacoes') }}">Atualizações passadas</a>
                 </div>
@@ -84,7 +84,7 @@
         {% for post in postagem %}
             <div class="postagem">
                 <div class="postHeader">
-                    <h1 {{ "style=font-size:1.5em;margin-bottom:1.25%;" if post[1]|length > 30 else '' }}   >{{ post[1] }} <span class="data">{{ post[3] }}</span></h1>
+                    <h1 {{ 'class=big' if post[1]|length > 30 else '' }}>{{ post[1].decode("utf-8") }} <span class="data">{{ post[3].decode("utf-8") }}</span></h1>
                     <a href="{{ url_for('postagem', id = post[0]) }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
                 </div>
                 <hr>
@@ -93,15 +93,15 @@
                         <img src="{{ url_for('static', filename='{}/{}.{}'.format(imgPath(), post[0], post[5])) }}">
                     {%endif%}
                     <div class="textoPost"> 
-                        <p>{{post[2].split('\n', 1)[0]}}</p>
+                        <p>{{post[2].split('\n', 1)[0].decode("utf-8") }}</p>
                     </div>
-                </div>
+                </div>          
                 <div class="postagemfooter">
-                    <p>by. {{ post[4] }}</p>
+                    <p>by. {{ post[4].decode("utf-8") }}</p>
                     <a class="botao post" href="{{ url_for('postagem', id = post[0]) }}">Acessar post</a>
                     <a data-post_id="{{post[0]}}" class="likes">{{ post[6] }} likes</a>
-                </div>
-            </div>
+                </div>            
+          </div>
         {%endfor%}
     </div>
 </main>

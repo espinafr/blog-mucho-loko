@@ -24,7 +24,7 @@
             </div>
             <ul>
                 {% for adm in admins %}
-                    <li>{{ adm[0] }}</li>
+                    <li>{{ adm[0].decode("utf-8") }}</li>
                 {%endfor%}
             </ul>
             <a class="botao post principal" href="{{ url_for('index') }}">Voltar</a>

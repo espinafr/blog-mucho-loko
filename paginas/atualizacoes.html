@@ -8,55 +8,81 @@
                 <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
             </div>
             <hr>
-            <div class="postContent nogap">
-                <div class="textoPost nogap border">
-                    <h3>release 1.2</h3>
-                    <hr>
-                    <ul>
-                        <li>Reorganizei a ordem de download na inicialização (fontes, ícone...)</li>
-                        <li>Posts com mais de 30 caracteres terão 1.5em de fonte (-.5em)</li>
-                        <li>Baixei JQuery no servidor</li>
-                    </ul>
+            <div style="display: flex; gap: 1em; flex-direction: column; align-items: center;">
+                <div class="postContent">
+                    <div class="textoPost nogap border">
+                        <h3>release 1.4</h3>
+                        <hr>
+                        <p>Agora posts podem ser editados por seus autores... Isso evita muita confusão.</p>
+                        <p>Nota pra mim mesmo: Quando for refazer esse site, SE CERTIFIQUE DE FAZER UM JEITO DE POSTAR LOGS TAMBÉM. Mudar manualmente a cada atualização é COISA DE MALUCO.</p>
+                    </div>
+                    <div class="textoPost nogap border">
+                        <h3>release 1.3</h3>
+                        <hr>
+                        <p>Agora os posts podem ser formatados em itálico, negrito e com underline. Além de agora ter suporte para links</p>
+                    </div>
                 </div>
-                <div class="textoPost nogap border">
-                    <h3>release 1.1</h3>
-                    <hr>
-                    <ul>
-                        <li>Manejando erros</li>
-                        <li>Removi os gnomos</li>
-                    </ul>
+                <div class="postContent nogap">
+                    <div class="textoPost nogap border">
+                        <h3>release 1.21</h3>
+                        <hr>
+                        <ul>
+                            <li>Removi os gnomos</li>
+                            <li>Retoques no estilo</li>
+                        </ul>
+                    </div>
+                    <div class="textoPost nogap border">
+                        <h3>release 1.2</h3>
+                        <hr>
+                        <ul>
+                            <li>Reorganizei a ordem de download na inicialização (fontes, ícone...)</li>
+                            <li>Posts com mais de 30 caracteres terão 1.5em de fonte (-.5em)</li>
+                            <li>Baixei JQuery no servidor</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="textoPost nogap border">
-                    <h3>release 1.0</h3>
-                    <hr>
-                    <p>eu literal fiz tudo do backend</p>
-                    <ul>
-                        <li>Servidor backend</li>
-                        <li>Publicação de posts</li>
-                        <li>Removi os gnomos</li>
-                        <li>Páginas dinâmicas</li>
-                        <li>Banco de dados</li>
-                        <li>Login do ADEEME</li>
-                        <li>Sistema de likes</li>
-                        <li>Novos redatores</li>
-                        <li>Otimizações gerais</li>
-                    </ul>
+                <div class="postContent nogap">
+                    <div class="textoPost nogap border">
+                        <h3>release 1.1</h3>
+                        <hr>
+                        <ul>
+                            <li>Manejando erros</li>
+                            <li>Removi os gnomos</li>
+                        </ul>
+                    </div>
+                    <div class="textoPost nogap border">
+                        <h3>release 1.0</h3>
+                        <hr>
+                        <p>eu literal fiz tudo do backend</p>
+                        <ul>
+                            <li>Servidor backend</li>
+                            <li>Publicação de posts</li>
+                            <li>Removi os gnomos</li>
+                            <li>Páginas dinâmicas</li>
+                            <li>Banco de dados</li>
+                            <li>Login do ADEEME</li>
+                            <li>Sistema de likes</li>
+                            <li>Novos redatores</li>
+                            <li>Otimizações gerais</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="postContent nogap">
-                <div class="textoPost nogap border">
-                    <h3>beta 0.11</h3>
-                    <hr>
-                    <p>Correção de erros e ajustes à aparência da página de atualizações</p>
-                </div>
-                <div class="textoPost nogap border">
-                    <h3>beta 0.1</h3>
-                    <hr>
-                    <p>Terminei a aparência do site, só peguei um molde de um trabalho que eu fiz... Agora só falta todo o resto rs</p>
+                <div class="postContent nogap">
+                    <div class="textoPost nogap border">
+                        <h3>beta 0.11</h3>
+                        <hr>
+                        <p>Correção de erros e ajustes à aparência da página de atualizações</p>
+                    </div>
+                    <div class="textoPost nogap border">
+                        <h3>beta 0.1</h3>
+                        <hr>
+                        <p>Terminei a aparência do site, só peguei um molde de um trabalho que eu fiz... Agora só falta
+                            todo o resto rs</p>
+                    </div>
                 </div>
             </div>
             {%if logado() %}
-                <a href="{{url_for('addadmin')}}" class="botao post principal">Adicionar ADMINS</a>
+            <a href="{{url_for('addadmin')}}" class="botao post principal">Adicionar ADMINS</a>
             {%endif%}
             <a class="botao post principal" href="{{ url_for('index') }}">Voltar</a>
         </div>

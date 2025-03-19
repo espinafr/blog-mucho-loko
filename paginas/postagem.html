@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block additional_styles %}
 <script src="{{ url_for('static', filename='jquery.js') }}"></script>
-<script src="{{ url_for('static', filename='like.js') }}"></script>
+<script src="{{ url_for('static', filename='postHandler.js') }}"></script>
 {% endblock %}
 {% block content %}
 <main>
     <div class="mainContent">
         <div class="postagem principal">
             <div class="postHeader">
-                <h1 {{ "style=font-size:1.5em;margin-bottom:1.25%;" if post[1]|length > 30 else '' }}>{{ post[1]}} <span class="data">{{post[3]}}</span></h1>
+                <h1 {{ 'class=big' if post[1]|length > 30 else '' }}>{{ post[1].decode("utf-8") }} <span class="data">{{ post[3].decode("utf-8") }}</span></h1>
                 <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='imagens/botoesControle.png') }}"></a>
             </div>
             <hr>
@@ -20,7 +20,7 @@
                   {%endif%}
                   <div class="textoPost">
                       {% for paragrafo2 in paragrafo.split('\n') %}
-                        <p>{{paragrafo2}}</p>
+                        <p>{{ paragrafo2.decode("utf-8") }}</p>
                       {% endfor %}
                   </div>
               </div>
@@ -29,18 +29,20 @@
               <div class="postContent">
                   <div class="textoPost">
                       {% for paragrafo in post[2].split('\n') %}
-                        <p>{{paragrafo}}</p>
+                        <p>{{paragrafo.decode("utf-8") }}</p>
                       {% endfor %}
                   </div>
               </div>
             {%endif%}
-            
             <div class="postagemfooter">
-                <p>Autor: {{ post[4] }}</p>
+                <p>Autor: {{ post[4].decode("utf-8") }} {{ "(editado)" if post[7]==1 else ""}}</p>
                 {% if logado() %}
                     <div style="display: flex; align-items: center;">
                       <a class="botao post principal" href="{{ url_for('index') }}" style="width: 40%;">Voltar</a>
+                      {% if autor(post[4]) %}
                       <a class="botao post principal" href="{{ url_for('deletarpost', post_id=post[0]) }}" style="color: red!important; border-color: red; width: 40%;">Deletar</a>
+                      <a class="botao post principal" href="{{ url_for('editar', post_id=post[0]) }}" style="color: darkgreen!important; border-color: darkgreen; width: 40%;">Editar</a>
+                      {% endif %}
                     </div>
                 {% else %}
                     <a class="botao post principal" href="{{ url_for('index') }}">Voltar</a>

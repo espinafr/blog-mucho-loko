@@ -319,6 +319,11 @@ main .mainContent {
     margin: 0;
 }
 
+h1.big {
+  font-size: 1.5em!important;
+  margin-bottom: 1.25%!important;
+}
+
 .textoPost *,
 .box p {
     text-indent: 1em;
@@ -422,6 +427,20 @@ footer .footerMain {
     text-decoration: underline;
 }
 
+.italico {
+    font-style: italic;
+}
+
+a.textLink {
+    font-size: inherit;
+    text-decoration: underline!important;
+    color: #1ab0ec!important;
+}
+
+a.textLink:hover {
+    font-size: inherit!important;
+}
+
 @media screen and (max-width: 1500px),
        screen and (max-height: 760px) {
     main {
@@ -481,12 +500,18 @@ footer .footerMain {
     }
 }
 
-@media screen and (max-width: 470px) {
+@media screen and (max-width: 890px) {
     .postHeader h1,
     .box h1 {
         font-size: 1em;
         margin-bottom: 1em;
     }
+
+    .postHeader h1.big {
+      font-size:0.5em!important;
+      margin-bottom:1.25%!important;
+    }
+    
     .postHeader img {
         display: none;
     }
